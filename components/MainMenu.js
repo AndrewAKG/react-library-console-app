@@ -29,9 +29,9 @@ const MainMenu = ({ onSelect, inHistory = false, selectedValue }) => {
   return !inHistory ? 
   <SelectInput items={choices} onSelect={onSelect} /> 
   : 
-  <div>
+  <React.Fragment>
     {choices.map(item => <Text color={item.value === selectedValue? "green": "gray"}>{item.label}</Text>)}
-  </div>
+  </React.Fragment>
 }
 
 module.exports = MainMenu;

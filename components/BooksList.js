@@ -6,9 +6,9 @@ const BooksList = ({ items, onSelect, inHistory = false, selectedValue }) => {
   return !inHistory ? 
   <SelectInput items={items} onSelect={onSelect} /> 
   : 
-  <div>
+  <React.Fragment>
     {items.map(item => <Text color={item.value === selectedValue? "green": "gray"}>{item.label}</Text>)}
-  </div>
+  </React.Fragment>
 }
 
 module.exports = BooksList;
