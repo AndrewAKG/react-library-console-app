@@ -1,50 +1,68 @@
 "use strict";
 const React = require("react");
 const importJsx = require("import-jsx");
-const uuid = require('react-uuid');
-const { Text, Newline, useApp } = require("ink");
+const { useApp } = require("ink");
 const { useState, useEffect } = require("react");
 
 const MainMenu = importJsx("./MainMenu.js");
 const BooksList = importJsx("./BooksList.js");
-const BookDetails = importJsx("./BookDetails.js");
+const AddBook = importJsx("./AddBook.js");
 
 const { getAllBooks } = require("../service/booksService");
 
+const mainChoices = [
+	{
+		label: "View all books",
+		value: "VIEW",
+	},
+	{
+		label: "Add a book",
+		value: "ADD",
+	},
+	{
+		label: "Edit a book",
+		value: "EDIT",
+	},
+	{
+		label: "Search for a book",
+		value: "SEARCH",
+	},
+	{
+		label: "Save and exit",
+		value: "EXIT",
+	},
+];
+
 const Content = ({ setHistory, history }) => {
-  const {exit} = useApp();
-  const [mode, setMode] = useState("MAIN_MENU");
-  const [booksList, setBooksList] = useState([]);
-  const [books, setBooks] = useState([]);
+	const { exit } = useApp();
+	const [mode, setMode] = useState("MAIN_MENU");
+	const [booksList, setBooksList] = useState([]);
+	const [books, setBooks] = useState([]);
 
 	useEffect(() => {
 		let books = getAllBooks();
 		setBooks(books);
 	}, []);
 
-  const handleViewBook = (item) => {
+	const handleViewBook = (item) => {
 		// add to history
 		let currentHistory = [...history];
-		currentHistory.push(
-			<Text key={uuid()} color="cyan">Choose a book to view or return to main menu</Text>
-		);
-		currentHistory.push(
-			<BooksList
-				key={uuid()}
-				items={booksList}
-				inHistory={true}
-				selectedValue={item.value}
-			/>
-		);
-		currentHistory.push(<Newline key={uuid()}/>);
+		currentHistory.push({
+			type: "select",
+			title: "Choose a book to view or return to main menu",
+			options: booksList,
+			selectedValue: item.value,
+		});
 
 		if (item.value !== -1) {
 			let bookId = item.value;
 			let chosenBook = books.filter((book) => book.id === bookId);
 
 			// add to history
-			currentHistory.push(<BookDetails book={chosenBook[0]} key={uuid()} />);
-			currentHistory.push(<Newline key={uuid()} />);
+			currentHistory.push({
+				type: "details_view",
+				item: chosenBook[0],
+			});
 		}
 
 		setHistory(currentHistory);
@@ -55,7 +73,11 @@ const Content = ({ setHistory, history }) => {
 		} else {
 			setMode("BOOKS_LIST_VIEW");
 		}
-	};
+  };
+  
+  const handleAddBook = (title, author, desc) => {
+    console.log(title, author, desc);
+  }
 
 	const handleMainMenu = (item) => {
 		switch (item.value) {
@@ -73,24 +95,18 @@ const Content = ({ setHistory, history }) => {
 				setBooksList(newBooksList);
 
 				let currentHistory = [...history];
-				currentHistory.push(
-					<Text key={uuid()} color="cyan">Choose one of the following actions</Text>
-				);
-				currentHistory.push(
-					<MainMenu
-						key={uuid()}
-						items={booksList}
-						inHistory={true}
-						selectedValue={item.value}
-					/>
-				);
-				currentHistory.push(<Newline key={uuid()} />);
+				currentHistory.push({
+					type: "select",
+					title: "Choose one of the following actions",
+					options: mainChoices,
+					selectedValue: item.value,
+				});
 				setHistory(currentHistory);
 				setMode("BOOKS_LIST_VIEW");
 				break;
 
 			case "ADD":
-				console.log("add");
+				setMode("ADD_BOOK");
 				break;
 
 			case "EDIT":
@@ -106,29 +122,20 @@ const Content = ({ setHistory, history }) => {
 		}
 	};
 
-  switch (mode) {
-    case "MAIN_MENU":
-      return (
-        <React.Fragment>
-          <Text color="yellow">Choose one of the following actions</Text>
-          <MainMenu onSelect={handleMainMenu} />
-        </React.Fragment>
-      );
+	switch (mode) {
+		case "MAIN_MENU":
+			return <MainMenu onSelect={handleMainMenu} />;
 
-    case "BOOKS_LIST_VIEW":
-      return (
-        <React.Fragment>
-          <Text color="yellow">
-            Choose a book to view or return to main menu
-          </Text>
-          <BooksList items={booksList} onSelect={handleViewBook} />
-        </React.Fragment>
-      );
+		case "BOOKS_LIST_VIEW":
+			return <BooksList items={booksList} onSelect={handleViewBook} />;
+      
+    case "ADD_BOOK":
+      return <AddBook onSubmit={handleAddBook} />;
 
-    default:
-      console.log("here");
-      return null;
-  }
+		default:
+			console.log("here");
+			return null;
+	}
 };
 
 module.exports = Content;

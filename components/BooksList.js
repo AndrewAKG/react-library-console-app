@@ -1,14 +1,14 @@
 const React = require("react");
-const { Text } = require("ink");
 const SelectInput = require("ink-select-input").default;
+const { Text } = require("ink");
 
-const BooksList = ({ items, onSelect, inHistory = false, selectedValue }) => {
-  return !inHistory ? 
-  <SelectInput items={items} onSelect={onSelect} /> 
-  : 
-  <React.Fragment>
-    {items.map((item, index) => <Text key={index} color={item.value === selectedValue? "green": "gray"}>{item.label}</Text>)}
-  </React.Fragment>
-}
+const BooksList = ({ items, onSelect }) => {
+	return (
+		<React.Fragment>
+			<Text color="yellow">Choose a book to view or return to main menu</Text>
+			<SelectInput items={items} onSelect={onSelect} />
+		</React.Fragment>
+	);
+};
 
 module.exports = BooksList;

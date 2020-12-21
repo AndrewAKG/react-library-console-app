@@ -1,8 +1,16 @@
 {
-  "books": [{
-    "id": 0,
-    "title": "test",
-    "author": "test",
-    "desc": "test"
-  }]
+  "books": [
+    {
+      "id": 0,
+      "title": "test",
+      "author": "test",
+      "desc": "test"
+    },
+    {
+      "id": 1,
+      "title": "test2",
+      "author": "test2",
+      "desc": "test2"
+    }
+  ]
 }

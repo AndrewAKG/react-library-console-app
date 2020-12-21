@@ -1,6 +1,6 @@
 const React = require("react");
-const { Text } = require("ink");
 const SelectInput = require("ink-select-input").default;
+const { Text } = require("ink");
 
 const choices = [
 	{
@@ -22,16 +22,16 @@ const choices = [
 	{
 		label: "Save and exit",
 		value: "EXIT",
-	}
+	},
 ];
 
-const MainMenu = ({ onSelect, inHistory = false, selectedValue }) => {
-  return !inHistory ? 
-  <SelectInput items={choices} onSelect={onSelect} /> 
-  : 
-  <React.Fragment>
-    {choices.map((item, index) => <Text key={index} color={item.value === selectedValue? "green": "gray"}>{item.label}</Text>)}
-  </React.Fragment>
-}
+const MainMenu = ({ onSelect }) => {
+	return (
+		<React.Fragment>
+			<Text color="yellow">Choose one of the following actions</Text>
+			<SelectInput items={choices} onSelect={onSelect} />
+		</React.Fragment>
+	);
+};
 
 module.exports = MainMenu;
