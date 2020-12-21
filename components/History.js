@@ -1,5 +1,16 @@
 const React = require('react');
 
+
+/**
+ * History Json structure
+ * {
+ *    type: select | view | add | edit | search |
+ *    title: action title
+ *    options: select options if type is select || []
+ *    
+ * }
+ *  
+ */
 const History = ({ history }) => {
   return <React.Fragment>
     {
@@ -8,4 +19,4 @@ const History = ({ history }) => {
   </React.Fragment>
 }
 
-module.exports = History;
+module.exports = React.memo(History);

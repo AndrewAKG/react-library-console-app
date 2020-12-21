@@ -30,7 +30,7 @@ const MainMenu = ({ onSelect, inHistory = false, selectedValue }) => {
   <SelectInput items={choices} onSelect={onSelect} /> 
   : 
   <React.Fragment>
-    {choices.map(item => <Text color={item.value === selectedValue? "green": "gray"}>{item.label}</Text>)}
+    {choices.map((item, index) => <Text key={index} color={item.value === selectedValue? "green": "gray"}>{item.label}</Text>)}
   </React.Fragment>
 }
 
