@@ -1,16 +1,10 @@
 {
   "books": [
     {
-      "id": 0,
-      "title": "test",
-      "author": "test",
-      "desc": "test"
-    },
-    {
-      "id": 1,
-      "title": "test2",
-      "author": "test2",
-      "desc": "test2"
+      "id": "2b3da32c-fca4-4f57-a9ea-cb56c3c0e745",
+      "title": "title",
+      "author": "author",
+      "description": "desc"
     }
   ]
 }

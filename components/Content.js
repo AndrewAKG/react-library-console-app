@@ -7,8 +7,9 @@ const { useState, useEffect } = require("react");
 const MainMenu = importJsx("./MainMenu.js");
 const BooksList = importJsx("./BooksList.js");
 const AddBook = importJsx("./AddBook.js");
+const EditBook = importJsx("./EditBook");
 
-const { getAllBooks } = require("../service/booksService");
+const { getAllBooks, addBook } = require("../service/booksService");
 
 const mainChoices = [
 	{
@@ -38,11 +39,19 @@ const Content = ({ setHistory, history }) => {
 	const [mode, setMode] = useState("MAIN_MENU");
 	const [booksList, setBooksList] = useState([]);
 	const [books, setBooks] = useState([]);
+	const [chosenBook, setChosenBook] = useState([]);
+	const [editMode, setEditMode] = useState(false);
 
 	useEffect(() => {
 		let books = getAllBooks();
 		setBooks(books);
 	}, []);
+
+	const updateHistory = (newEvent) => {
+		let currentHistory = [...history];
+		currentHistory.push(newEvent);
+		setHistory(currentHistory);
+	};
 
 	const handleViewBook = (item) => {
 		// add to history
@@ -73,15 +82,64 @@ const Content = ({ setHistory, history }) => {
 		} else {
 			setMode("BOOKS_LIST_VIEW");
 		}
-  };
-  
-  const handleAddBook = (title, author, desc) => {
-    console.log(title, author, desc);
-  }
+	};
+
+	const handleAddBook = (title, author, desc) => {
+		let newBook = addBook(title, author, desc);
+		let newBooks = [...books];
+		newBooks.push(newBook);
+		setBooks(newBooks);
+
+		updateHistory({
+			type: "info",
+			title: "saved.",
+			item: newBook,
+		});
+		setMode("MAIN_MENU");
+	};
+
+	const handleViewBookEditMode = (item) => {
+		// add to history
+		updateHistory({
+			type: "select",
+			title: "Choose a book to edit or return to main menu",
+			options: booksList,
+			selectedValue: item.value,
+		});
+
+		if (item.value !== -1) {
+			let bookId = item.value;
+			let chosenBook = books.filter((book) => book.id === bookId);
+			setChosenBook(chosenBook[0]? chosenBook[0]: {});
+		}
+
+		// adjust ui
+		if (item.value === -1) {
+			setMode("MAIN_MENU");
+		} else {
+			setMode("EDIT_BOOK");			
+		}
+	};
+
+	const handleEditBook = (title, author, desc) => {
+		console.log(title, author, desc);
+	};
 
 	const handleMainMenu = (item) => {
+		updateHistory({
+			type: "select",
+			title: "Choose one of the following actions",
+			options: mainChoices,
+			selectedValue: item.value,
+		});
+
 		switch (item.value) {
 			case "VIEW":
+			case "EDIT":
+				if (item.value === "EDIT") {
+					setEditMode(true);
+				}
+
 				const newBooksList = books.map((book) => ({
 					label: `${book.title}`,
 					value: book.id,
@@ -93,24 +151,11 @@ const Content = ({ setHistory, history }) => {
 				});
 
 				setBooksList(newBooksList);
-
-				let currentHistory = [...history];
-				currentHistory.push({
-					type: "select",
-					title: "Choose one of the following actions",
-					options: mainChoices,
-					selectedValue: item.value,
-				});
-				setHistory(currentHistory);
 				setMode("BOOKS_LIST_VIEW");
 				break;
 
 			case "ADD":
 				setMode("ADD_BOOK");
-				break;
-
-			case "EDIT":
-				console.log("edit");
 				break;
 
 			case "SEARCH":
@@ -127,13 +172,21 @@ const Content = ({ setHistory, history }) => {
 			return <MainMenu onSelect={handleMainMenu} />;
 
 		case "BOOKS_LIST_VIEW":
-			return <BooksList items={booksList} onSelect={handleViewBook} />;
-      
-    case "ADD_BOOK":
-      return <AddBook onSubmit={handleAddBook} />;
+			return (
+				<BooksList
+					items={booksList}
+					edit={editMode}
+					onSelect={editMode ? handleViewBookEditMode : handleViewBook}
+				/>
+			);
+
+		case "ADD_BOOK":
+			return <AddBook onSubmit={handleAddBook} />;
+
+		case "EDIT_BOOK":
+			return <EditBook book={chosenBook} onSubmit={handleEditBook} />;
 
 		default:
-			console.log("here");
 			return null;
 	}
 };
