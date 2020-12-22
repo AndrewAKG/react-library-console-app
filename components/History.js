@@ -1,10 +1,12 @@
 const React = require("react");
+const { useContext } = require("react");
 const importJsx = require("import-jsx");
 
 const uuid = require("react-uuid");
 const { Text, Newline } = require("ink");
 
 const BookDetails = importJsx("./BookDetails.js");
+const HistoryContext = require('../state/History');
 
 /**
  * History Json structure
@@ -18,7 +20,9 @@ const BookDetails = importJsx("./BookDetails.js");
  * }
  */
 
-const History = ({ history }) => {
+const History = () => {
+	const { history } = useContext(HistoryContext);
+
 	return (
 		<React.Fragment>
 			{history.map((event) => {

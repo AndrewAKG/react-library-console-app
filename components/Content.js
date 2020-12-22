@@ -2,7 +2,9 @@
 const React = require("react");
 const importJsx = require("import-jsx");
 const { useApp } = require("ink");
-const { useState, useEffect } = require("react");
+const { useState, useEffect, useContext } = require("react");
+
+const HistoryContext = require('../state/History');
 
 const MainMenu = importJsx("./MainMenu.js");
 const BooksList = importJsx("./BooksList.js");
@@ -35,8 +37,10 @@ const mainChoices = [
 	},
 ];
 
-const Content = ({ setHistory, history }) => {
+const Content = () => {
 	const { exit } = useApp();
+	const { setHistory: updateHistory } = useContext(HistoryContext);
+
 	const [mode, setMode] = useState("MAIN_MENU");
 	const [booksList, setBooksList] = useState([]);
 	const [books, setBooks] = useState([]);
@@ -47,12 +51,6 @@ const Content = ({ setHistory, history }) => {
 		let books = getAllBooks();
 		setBooks(books);
 	}, []);
-
-	const updateHistory = (newEvent) => {
-		let currentHistory = [...history];
-		currentHistory.push(newEvent);
-		setHistory(currentHistory);
-	};
 
 	const updateBooksList = (newBooks) => {
 		const newBooksList = newBooks.map((book) => ({
@@ -70,8 +68,7 @@ const Content = ({ setHistory, history }) => {
 
 	const handleViewBook = (item) => {
 		// add to history
-		let currentHistory = [...history];
-		currentHistory.push({
+		updateHistory({
 			type: "select",
 			title: "Choose a book to view or return to main menu",
 			options: booksList,
@@ -83,13 +80,11 @@ const Content = ({ setHistory, history }) => {
 			let chosenBook = books.filter((book) => book.id === bookId);
 
 			// add to history
-			currentHistory.push({
+			updateHistory({
 				type: "details_view",
 				item: chosenBook[0],
 			});
 		}
-
-		setHistory(currentHistory);
 
 		// adjust ui
 		if (item.value === -1) {

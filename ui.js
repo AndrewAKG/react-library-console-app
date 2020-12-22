@@ -2,21 +2,27 @@
 const React = require("react");
 const importJsx = require("import-jsx");
 
-const { useState } = require("react");
+const { useReducer } = require("react");
 const BigText = require("ink-big-text");
 
 const History = importJsx("./components/History.js");
 const Content = importJsx("./components/Content.js");
 
+const HistoryContext = require("./state/History");
+
+const historyReducer = (state, newEvent) => {
+  return [...state, newEvent];
+}
+
 const App = () => {
-	const [history, setHistory] = useState([]);
+  const [history, setHistory] = useReducer(historyReducer, []);
 
 	return (
-		<React.Fragment>
+		<HistoryContext.Provider value={{ history, setHistory }}>
 			{/* <BigText text="BOOKS MANAGER" /> */}
-			<History history={history} />
-			<Content history={history} setHistory={setHistory} />
-		</React.Fragment>
+			<History />
+			<Content />
+		</HistoryContext.Provider>
 	);
 };
 

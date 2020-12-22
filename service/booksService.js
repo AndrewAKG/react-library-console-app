@@ -20,7 +20,7 @@ const addBook = ({ title, author, desc }) => {
 	let newBook = new Book({ title, author, description: desc });
 
 	// update existing books
-	books.push(newBook);
+	books = [...books, newBook];
 
 	// save to json
 	let data = JSON.stringify({ books }, null, 2);
