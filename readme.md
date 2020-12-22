@@ -1,5 +1,5 @@
 # React Books Library Console App
-This is a react books library console application using [ink](#https://github.com/vadimdemedes/ink) library.
+This is a react books library console application using [ink](https://github.com/vadimdemedes/ink) library.
 
 ## Features
 - user can add a book 
@@ -16,4 +16,4 @@ This is a react books library console application using [ink](#https://github.co
 
 
 ## Demo
-![Demo](https://github.com/AndrewAKG/react-library-console-app/blob/main/demo.gif)
+![Demo](https://github.com/AndrewAKG/react-library-console-app/blob/master/demo.gif)
