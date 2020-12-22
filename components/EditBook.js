@@ -60,7 +60,7 @@ const EditBook = ({ onSubmit, book }) => {
 						}
 						setShowDesc(false);
 						let changed = title !== book.title || author !== book.author || desc !== book.description; 
-						onSubmit({ id: book.id, title, author, desc, changed });
+						onSubmit({ id: book.id, title, author, description: desc, changed });
 					}} />
 				</Box>
 			)}

@@ -8,8 +8,9 @@ const MainMenu = importJsx("./MainMenu.js");
 const BooksList = importJsx("./BooksList.js");
 const AddBook = importJsx("./AddBook.js");
 const EditBook = importJsx("./EditBook");
+const SearchForBook = importJsx("./SearchForBook.js");
 
-const { getAllBooks, addBook, editBook } = require("../service/booksService");
+const { getAllBooks, addBook, editBook, searchForBook } = require("../service/booksService");
 
 const mainChoices = [
 	{
@@ -159,6 +160,18 @@ const Content = ({ setHistory, history }) => {
 		setMode("BOOKS_LIST_VIEW");
 	};
 
+	const handleSearchForBook = (searchKey) => {
+		updateHistory({
+			type: "search",
+			title: "Type in one or more keywords to search for",
+			searchKey
+		})
+
+		let searchResults = searchForBook(searchKey);
+		updateBooksList(searchResults);
+		setMode('BOOKS_LIST_VIEW');
+	};
+
 	const handleMainMenu = (item) => {
 		updateHistory({
 			type: "select",
@@ -183,7 +196,7 @@ const Content = ({ setHistory, history }) => {
 				break;
 
 			case "SEARCH":
-				console.log("search");
+				setMode("SEARCH_FOR_BOOK");
 				break;
 
 			default:
@@ -210,9 +223,12 @@ const Content = ({ setHistory, history }) => {
 		case "EDIT_BOOK":
 			return <EditBook book={chosenBook} onSubmit={handleEditBook} />;
 
+		case "SEARCH_FOR_BOOK":
+			return <SearchForBook onSubmit={handleSearchForBook} />
+
 		default:
 			return null;
 	}
 };
 
-module.exports = Content;
+module.exports = React.memo(Content);

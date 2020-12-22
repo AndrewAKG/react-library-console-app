@@ -53,8 +53,18 @@ const editBook = (editedBook) => {
 	return editedBook;
 };
 
+const searchForBook = (searchKey) => {
+	let searchResults = books.filter((book) => {
+		const { title, author, description } = book;
+		return title.includes(searchKey) || author.includes(searchKey) || description.includes(searchKey);
+	});
+
+	return searchResults;
+}
+
 module.exports = {
 	getAllBooks,
 	addBook,
 	editBook,
+	searchForBook
 };

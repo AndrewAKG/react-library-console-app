@@ -9,11 +9,12 @@ const BookDetails = importJsx("./BookDetails.js");
 /**
  * History Json structure
  * {
- *    type: select | details_view | info
+ *    type: select | details_view | info | search
  *    title: action title
  *    options: select options if type is select || []
- *    item: item to view if type is details_view
+ *    item: item to view if type is details_view or info
  *    selectedValue: selected value if type is select
+ * 		searchKey: keyword if type is search
  * }
  */
 
@@ -25,7 +26,7 @@ const History = ({ history }) => {
 					case "select":
 						return (
 							<React.Fragment key={uuid()}>
-								<Text key={uuid()} color="cyan">{event.title}</Text>
+								<Text color="cyan">{event.title}</Text>
 								{event.options.map((item) => (
 									<Text
 										key={uuid()}
@@ -54,7 +55,16 @@ const History = ({ history }) => {
 								<Text color="cyan">{`[INFO] [${event.item.id}] ${event.item.title} book ${event.title}`}</Text>
 								<Newline />
 							</React.Fragment>
-						)
+						);
+
+					case "search":
+						return (
+							<React.Fragment key={uuid()}>
+								<Text color="cyan">{event.title}</Text>
+								<Text>Search: {event.searchKey}</Text>
+								<Newline />
+							</React.Fragment>
+						);
 
 					default:
 						return null;
