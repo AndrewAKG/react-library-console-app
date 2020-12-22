@@ -19,10 +19,10 @@ const {
  * History structure
  * {
  * 		id: unique event id
- *    type: select | details_view | info | search
+ *    type: select | details_view | book_event | search | info
  *    title: action title
  *    options: select options if type is select || []
- *    item: item to view if type is details_view or info
+ *    item: item to view if type is details_view or book_event
  *    selectedValue: selected value if type is select
  * 		searchKey: keyword if type is search
  * }
@@ -63,7 +63,7 @@ const History = () => {
 							</React.Fragment>
 						);
 
-					case "info":
+					case "book_event":
 						return (
 							<React.Fragment key={event.id}>
 								<Title text={`[INFO] [${event.item.id}] ${event.item.title} book ${event.title}`} color={HISTORY_TITLE} />
@@ -76,6 +76,14 @@ const History = () => {
 							<React.Fragment key={event.id}>
 								<Title text={event.title} color={HISTORY_TITLE} />
 								<Text>Search: {event.searchKey}</Text>
+								<Newline />
+							</React.Fragment>
+						);
+					
+					case "info":
+						return (
+							<React.Fragment key={event.id}>
+								<Title text={`[INFO] ${event.title}`} color={HISTORY_TITLE} />
 								<Newline />
 							</React.Fragment>
 						);

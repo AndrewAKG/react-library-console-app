@@ -2,12 +2,13 @@
 
 const fs = require("fs");
 const Book = require("../models/Book");
+const { BOOKS_FILE } = require("../constants/Phrases");
 
 let books = [];
 
 const getAllBooks = () => {
 	try {
-		let rawdata = fs.readFileSync("books.json");
+		let rawdata = fs.readFileSync(BOOKS_FILE);
 		let booksFile = JSON.parse(rawdata);
 		books = booksFile.books;
 		return books;
@@ -26,7 +27,7 @@ const addBook = ({ title, author, desc }) => {
 	let data = JSON.stringify({ books }, null, 2);
 
 	try {
-		fs.writeFile("books.json", data, (err) => {
+		fs.writeFile(BOOKS_FILE, data, (err) => {
 			if (err) throw err;
 		});
 	} catch (e) {}
@@ -44,7 +45,7 @@ const editBook = (editedBook) => {
 		let data = JSON.stringify({ books }, null, 2);
 
 		try {
-			fs.writeFile("books.json", data, (err) => {
+			fs.writeFile(BOOKS_FILE, data, (err) => {
 				if (err) throw err;
 			});
 		} catch (e) {}

@@ -1,70 +1,10 @@
 {
   "books": [
     {
-      "id": "2b3da32c-fca4-4f57-a9ea-cb56c3c0e745",
-      "title": "title",
-      "author": "author",
-      "description": "desc"
-    },
-    {
-      "id": "bbab4a78-3fdb-4c33-a87d-69bb44b67e0a",
-      "title": "title1",
-      "author": "author1",
-      "description": "desc"
-    },
-    {
-      "id": "3d93b2aa-9c1f-4b5a-9fc9-83f5b199cb46",
-      "title": "title2",
-      "author": "auth2",
-      "description": "desc2"
-    },
-    {
-      "id": "a97e4095-5109-4fc7-aaba-4f3bfcfbe855",
-      "title": "seko",
-      "author": "seko",
-      "description": "seko"
-    },
-    {
-      "id": "af1a7c7f-1d83-4ec6-8917-3bec6d029c69",
-      "title": "seko2",
-      "author": "seko2",
-      "description": "seko2"
-    },
-    {
-      "id": "826ab9a4-f20f-4bba-828e-71132c23b1a4",
-      "title": "zft",
-      "author": "zft2",
-      "description": "zft1"
-    },
-    {
-      "id": "326ebb21-823d-46e6-a23f-90272ccb2f4a",
-      "title": "sdasad",
-      "author": "asdasdsa",
-      "description": "asdasdasd"
-    },
-    {
-      "id": "e4e10d11-79a4-4f1f-9093-44bbf01850ac",
-      "title": "7aga tanya",
-      "author": "author2",
-      "description": "desc2"
-    },
-    {
-      "id": "53cac70b-dbe6-4d9b-be07-5a2e27a80715",
+      "id": "d486e513-a6a4-4694-a3f2-1cb8229ecf2e",
       "title": "test",
-      "author": "teasd",
-      "description": "asdasd"
-    },
-    {
-      "id": "b5384911-08ff-464e-b585-78f29b84f881",
-      "title": "TEST",
-      "author": "TEST",
-      "description": "TEST"
-    },
-    {
-      "id": "74ac8722-489d-434d-8416-f2de05918922",
-      "title": "CHECK",
-      "author": "CHECK",
-      "description": "CJECL"
+      "author": "test",
+      "description": "test"
     }
   ]
 }

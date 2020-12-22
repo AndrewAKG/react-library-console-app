@@ -4,6 +4,7 @@ const { useState } = require("react");
 const { Text } = require("ink");
 
 const Title = importJsx("../elements/Title.js");
+const Error = importJsx("../elements/Error.js");
 const TextInput = importJsx("../elements/TextInput.js");
 
 const { TITLE_COLOR } = require("../constants/Colors");
@@ -18,6 +19,16 @@ const EditBook = ({ onSubmit, book }) => {
 	const [showAuthor, setShowAuthor] = useState(false);
 	const [showDesc, setShowDesc] = useState(false);
 
+	const [error, setError] = useState(false);
+
+	const validateInput = (text) => {
+		if (!text || text.length < 3) {
+			setError(true);
+			return false;
+		}
+		return true;
+	};
+
 	return (
 		<React.Fragment>
 			<Title color={TITLE_COLOR} text={EDIT_TITLE} />
@@ -27,9 +38,14 @@ const EditBook = ({ onSubmit, book }) => {
 				<TextInput
 					text={"Title"}
 					value={title}
-					onChange={setTitle}
+					onChange={(text) => {
+						setTitle(text);
+						if (error && text && text.length >= 3) {
+							setError(false);
+						}
+					}}
 					onSubmit={(text) => {
-						if (!text) {
+						if (!validateInput(text)) {
 							return;
 						}
 						setShowTitle(false);
@@ -41,9 +57,14 @@ const EditBook = ({ onSubmit, book }) => {
 				<TextInput
 					text={"Author"}
 					value={author}
-					onChange={setAuthor}
+					onChange={(text) => {
+						setAuthor(text);
+						if (error && text && text.length >= 3) {
+							setError(false);
+						}
+					}}
 					onSubmit={(text) => {
-						if (!text) {
+						if (!validateInput(text)) {
 							return;
 						}
 						setShowAuthor(false);
@@ -53,11 +74,16 @@ const EditBook = ({ onSubmit, book }) => {
 			)}
 			{showDesc && (
 				<TextInput
-					text={'Description'}
+					text={"Description"}
 					value={desc}
-					onChange={setDesc}
+					onChange={(text) => {
+						setDesc(text);
+						if (error && text && text.length >= 3) {
+							setError(false);
+						}
+					}}
 					onSubmit={(text) => {
-						if (!text) {
+						if (!validateInput(text)) {
 							return;
 						}
 						setShowDesc(false);
@@ -75,6 +101,7 @@ const EditBook = ({ onSubmit, book }) => {
 					}}
 				/>
 			)}
+			{error && <Error text={"please enter at least 3 characters to submit"} />}
 		</React.Fragment>
 	);
 };

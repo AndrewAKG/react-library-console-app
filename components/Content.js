@@ -55,6 +55,14 @@ const Content = () => {
 	useEffect(() => {
 		// get all books from json file
 		let books = getAllBooks();
+
+		// add history event
+		updateHistory({
+			id: uuid(),
+			type: "info",
+			title: `loaded [${books.length}] book(s) into the library.`
+		})
+
 		setBooks(books);
 	}, []);
 
@@ -113,7 +121,7 @@ const Content = () => {
 		// add history event
 		updateHistory({
 			id: uuid(),
-			type: "info",
+			type: "book_event",
 			title: "saved.",
 			item: newBook,
 		});
@@ -168,7 +176,7 @@ const Content = () => {
 			// add history event
 			updateHistory({
 				id: uuid(),
-				type: "info",
+				type: "book_event",
 				title: "edited successfully.",
 				item: editedBook,
 			});
@@ -193,6 +201,14 @@ const Content = () => {
 
 		// search for books that matches the user query
 		let searchResults = searchForBook(searchKey);
+
+		// add history event
+		updateHistory({
+			id: uuid(),
+			type: "info",
+			title: `[${searchResults.length}] book(s) matched your search query <${searchKey}>`
+		})
+
 		updateBooksList(searchResults);
 		setMode("BOOKS_LIST_VIEW");
 	};
