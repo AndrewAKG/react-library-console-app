@@ -12,7 +12,7 @@ This is a react books library console application using [ink](https://github.com
 - clone the repo `git clone https://github.com/AndrewAKG/react-library-console-app.git`
 - go to app directory `cd react-library-console-app`
 - npm install
-- run the library-console-app script `react-library-console-app`
+- run `npm start`
 
 
 ## Demo
