@@ -24,13 +24,17 @@ const AddBook = ({ onSubmit }) => {
 						<Text>Title:</Text>
 					</Box>
 
-					<TextInput value={title} onChange={setTitle} onSubmit={(text) => {
-						if(!text){
-							return;
-						}
-						setShowTitle(false);
-						setShowAuthor(true);
-					}} />
+					<TextInput
+						value={title}
+						onChange={setTitle}
+						onSubmit={(text) => {
+							if (!text) {
+								return;
+							}
+							setShowTitle(false);
+							setShowAuthor(true);
+						}}
+					/>
 				</Box>
 			)}
 			{showAuthor && (
@@ -39,13 +43,17 @@ const AddBook = ({ onSubmit }) => {
 						<Text>Author:</Text>
 					</Box>
 
-					<TextInput value={author} onChange={setAuthor} onSubmit={(text) => {
-						if(!text){
-							return;
-						}
-						setShowAuthor(false);
-						setShowDesc(true);
-					}} />
+					<TextInput
+						value={author}
+						onChange={setAuthor}
+						onSubmit={(text) => {
+							if (!text) {
+								return;
+							}
+							setShowAuthor(false);
+							setShowDesc(true);
+						}}
+					/>
 				</Box>
 			)}
 			{showDesc && (
@@ -54,13 +62,17 @@ const AddBook = ({ onSubmit }) => {
 						<Text>Description:</Text>
 					</Box>
 
-					<TextInput value={desc} onChange={setDesc} onSubmit={(text) => {
-						if(!text){
-							return;
-						}
-						setShowDesc(false);
-						onSubmit(title, author, desc);
-					}} />
+					<TextInput
+						value={desc}
+						onChange={setDesc}
+						onSubmit={(text) => {
+							if (!text) {
+								return;
+							}
+							setShowDesc(false);
+							onSubmit({ title, author, desc });
+						}}
+					/>
 				</Box>
 			)}
 		</React.Fragment>

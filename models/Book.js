@@ -1,8 +1,8 @@
 const { v4: uuidv4 } = require('uuid');
 
 class Book {
-  constructor(title, author, description){
-    this.id = uuidv4();
+  constructor({ id = uuidv4(), title, author, description }){
+    this.id = id;
     this.title = title;
     this.author = author;
     this.description = description;

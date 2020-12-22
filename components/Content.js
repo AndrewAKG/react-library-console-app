@@ -9,7 +9,7 @@ const BooksList = importJsx("./BooksList.js");
 const AddBook = importJsx("./AddBook.js");
 const EditBook = importJsx("./EditBook");
 
-const { getAllBooks, addBook } = require("../service/booksService");
+const { getAllBooks, addBook, editBook } = require("../service/booksService");
 
 const mainChoices = [
 	{
@@ -39,7 +39,7 @@ const Content = ({ setHistory, history }) => {
 	const [mode, setMode] = useState("MAIN_MENU");
 	const [booksList, setBooksList] = useState([]);
 	const [books, setBooks] = useState([]);
-	const [chosenBook, setChosenBook] = useState([]);
+	const [chosenBook, setChosenBook] = useState(null);
 	const [editMode, setEditMode] = useState(false);
 
 	useEffect(() => {
@@ -51,6 +51,20 @@ const Content = ({ setHistory, history }) => {
 		let currentHistory = [...history];
 		currentHistory.push(newEvent);
 		setHistory(currentHistory);
+	};
+
+	const updateBooksList = (newBooks) => {
+		const newBooksList = newBooks.map((book) => ({
+			label: `${book.title}`,
+			value: book.id,
+		}));
+
+		newBooksList.push({
+			label: "back to main menu",
+			value: -1,
+		});
+
+		setBooksList(newBooksList);
 	};
 
 	const handleViewBook = (item) => {
@@ -84,8 +98,8 @@ const Content = ({ setHistory, history }) => {
 		}
 	};
 
-	const handleAddBook = (title, author, desc) => {
-		let newBook = addBook(title, author, desc);
+	const handleAddBook = (addedBook) => {
+		let newBook = addBook(addedBook);
 		let newBooks = [...books];
 		newBooks.push(newBook);
 		setBooks(newBooks);
@@ -110,19 +124,39 @@ const Content = ({ setHistory, history }) => {
 		if (item.value !== -1) {
 			let bookId = item.value;
 			let chosenBook = books.filter((book) => book.id === bookId);
-			setChosenBook(chosenBook[0]? chosenBook[0]: {});
+			setChosenBook(chosenBook[0] ? chosenBook[0] : {});
 		}
 
 		// adjust ui
 		if (item.value === -1) {
 			setMode("MAIN_MENU");
+			setEditMode(false);
+			setChosenBook(null);
 		} else {
-			setMode("EDIT_BOOK");			
+			setMode("EDIT_BOOK");
 		}
 	};
 
-	const handleEditBook = (title, author, desc) => {
-		console.log(title, author, desc);
+	const handleEditBook = (newBook) => {
+		if (newBook.changed) {
+			let editedBook = editBook(newBook);
+			let bookIndex = books.findIndex((book) => book.id === newBook.id);
+
+			let newBooks = [...books];
+			if (bookIndex !== -1) {
+				newBooks[bookIndex] = editedBook;
+				setBooks(newBooks);
+			}
+
+			updateHistory({
+				type: "info",
+				title: "edited successfully.",
+				item: editedBook,
+			});
+
+			updateBooksList(newBooks);
+		}
+		setMode("BOOKS_LIST_VIEW");
 	};
 
 	const handleMainMenu = (item) => {
@@ -140,17 +174,7 @@ const Content = ({ setHistory, history }) => {
 					setEditMode(true);
 				}
 
-				const newBooksList = books.map((book) => ({
-					label: `${book.title}`,
-					value: book.id,
-				}));
-
-				newBooksList.push({
-					label: "back to main menu",
-					value: -1,
-				});
-
-				setBooksList(newBooksList);
+				updateBooksList(books);
 				setMode("BOOKS_LIST_VIEW");
 				break;
 

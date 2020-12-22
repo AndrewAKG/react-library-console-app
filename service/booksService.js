@@ -16,9 +16,10 @@ const getAllBooks = () => {
 	}
 };
 
-const addBook = (title, author, desc) => {
-	let newBook = new Book(title, author, desc);
-	// update existing aray
+const addBook = ({ title, author, desc }) => {
+	let newBook = new Book({ title, author, description: desc });
+
+	// update existing books
 	books.push(newBook);
 
 	// save to json
@@ -33,7 +34,24 @@ const addBook = (title, author, desc) => {
 	return newBook;
 };
 
-const editBook = () => {};
+const editBook = (editedBook) => {
+	let bookIndex = books.findIndex((book) => book.id === editedBook.id);
+	if (bookIndex !== -1) {
+		delete editedBook.changed;
+		books[bookIndex] = editedBook;
+
+		// save to json
+		let data = JSON.stringify({ books }, null, 2);
+
+		try {
+			fs.writeFile("books.json", data, (err) => {
+				if (err) throw err;
+			});
+		} catch (e) {}
+	}
+
+	return editedBook;
+};
 
 module.exports = {
 	getAllBooks,
