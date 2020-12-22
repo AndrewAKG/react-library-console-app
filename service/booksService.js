@@ -54,17 +54,22 @@ const editBook = (editedBook) => {
 };
 
 const searchForBook = (searchKey) => {
+	let lowerKey = searchKey.toLowerCase();
 	let searchResults = books.filter((book) => {
 		const { title, author, description } = book;
-		return title.includes(searchKey) || author.includes(searchKey) || description.includes(searchKey);
+		return (
+			title.toLowerCase().includes(lowerKey) ||
+			author.toLowerCase().includes(lowerKey) ||
+			description.toLowerCase().includes(lowerKey)
+		);
 	});
 
 	return searchResults;
-}
+};
 
 module.exports = {
 	getAllBooks,
 	addBook,
 	editBook,
-	searchForBook
+	searchForBook,
 };

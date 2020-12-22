@@ -7,8 +7,16 @@ const { Text, Newline, Static } = require("ink");
 const BookDetails = importJsx("./BookDetails.js");
 const HistoryContext = require("../state/History");
 
+const Title = importJsx("../elements/Title.js");
+
+const {
+	HISTORY_TITLE,
+	HISTORY_SELECTED_VALUE,
+	HISTORY_UN_SELECTED_VALUE,
+} = require("../constants/Colors");
+
 /**
- * History Json structure
+ * History structure
  * {
  * 		id: unique event id
  *    type: select | details_view | info | search
@@ -30,11 +38,13 @@ const History = () => {
 					case "select":
 						return (
 							<React.Fragment key={event.id}>
-								<Text color="cyan">{event.title}</Text>
+								<Title text={event.title} color={HISTORY_TITLE} />
 								{event.options.map((item, index) => (
 									<Text
 										color={
-											item.value === event.selectedValue ? "green" : "gray"
+											item.value === event.selectedValue
+												? HISTORY_SELECTED_VALUE
+												: HISTORY_UN_SELECTED_VALUE
 										}
 										key={index}
 									>
@@ -56,7 +66,7 @@ const History = () => {
 					case "info":
 						return (
 							<React.Fragment key={event.id}>
-								<Text color="cyan">{`[INFO] [${event.item.id}] ${event.item.title} book ${event.title}`}</Text>
+								<Title text={`[INFO] [${event.item.id}] ${event.item.title} book ${event.title}`} color={HISTORY_TITLE} />
 								<Newline />
 							</React.Fragment>
 						);
@@ -64,7 +74,7 @@ const History = () => {
 					case "search":
 						return (
 							<React.Fragment key={event.id}>
-								<Text color="cyan">{event.title}</Text>
+								<Title text={event.title} color={HISTORY_TITLE} />
 								<Text>Search: {event.searchKey}</Text>
 								<Newline />
 							</React.Fragment>

@@ -29,7 +29,7 @@ const {
 	MAIN_TITLE,
 	LIST_VIEW_TITLE,
 	LIST_EDIT_TITLE,
-	SEARCH_TITLE
+	SEARCH_TITLE,
 } = require("../constants/Phrases");
 const mainChoices = require("../constants/mainChoices");
 
@@ -60,7 +60,7 @@ const Content = () => {
 
 	// update booksList with BookListItem Structure
 	const updateBooksList = (newBooks) => {
-		const newBooksList = newBooks.map(book => new BookListItem(book));
+		const newBooksList = newBooks.map((book) => new BookListItem(book));
 
 		newBooksList.push({
 			label: "back to main menu",
@@ -150,17 +150,22 @@ const Content = () => {
 		}
 	};
 
+	// when user edits details of a book
 	const handleEditBook = (newBook) => {
+		// check if anything is changed in book details
 		if (newBook.changed) {
+			// edit and write to json
 			let editedBook = editBook(newBook);
 			let bookIndex = books.findIndex((book) => book.id === newBook.id);
 
+			// update books state
 			let newBooks = [...books];
 			if (bookIndex !== -1) {
 				newBooks[bookIndex] = editedBook;
 				setBooks(newBooks);
 			}
 
+			// add history event
 			updateHistory({
 				id: uuid(),
 				type: "info",
@@ -170,10 +175,15 @@ const Content = () => {
 
 			updateBooksList(newBooks);
 		}
+
+		// adjust UI
 		setMode("BOOKS_LIST_VIEW");
 	};
 
+
+	// when user submit search key in search scenario
 	const handleSearchForBook = (searchKey) => {
+		// add history event
 		updateHistory({
 			id: uuid(),
 			type: "search",
@@ -181,19 +191,23 @@ const Content = () => {
 			searchKey,
 		});
 
+		// search for books that matches the user query
 		let searchResults = searchForBook(searchKey);
 		updateBooksList(searchResults);
 		setMode("BOOKS_LIST_VIEW");
 	};
 
+	// user choose option from main menu
 	const handleMainMenu = (item) => {
-		updateHistory({
-			id: uuid(),
-			type: "select",
-			title: MAIN_TITLE,
-			options: mainChoices,
-			selectedValue: item.value,
-		});
+		if (item.value !== "EXIT") {
+			updateHistory({
+				id: uuid(),
+				type: "select",
+				title: MAIN_TITLE,
+				options: mainChoices,
+				selectedValue: item.value,
+			});
+		}
 
 		switch (item.value) {
 			case "VIEW":
@@ -214,6 +228,7 @@ const Content = () => {
 				setMode("SEARCH_FOR_BOOK");
 				break;
 
+			case "EXIT":
 			default:
 				exit();
 		}
@@ -239,7 +254,7 @@ const Content = () => {
 			return <EditBook book={chosenBook} onSubmit={handleEditBook} />;
 
 		case "SEARCH_FOR_BOOK":
-			return <SearchForBook onSubmit={handleSearchForBook} />
+			return <SearchForBook onSubmit={handleSearchForBook} />;
 
 		default:
 			return null;
