@@ -1,11 +1,16 @@
 const React = require("react");
+const importJsx = require("import-jsx");
+
 const SelectInput = require("ink-select-input").default;
-const { Text } = require("ink");
+
+const Title = importJsx("../elements/Title");
+const { LIST_VIEW_TITLE, LIST_EDIT_TITLE } = require("../constants/Phrases");
+const { TITLE_COLOR } = require("../constants/Colors");
 
 const BooksList = ({ items, onSelect, edit }) => {
 	return (
 		<React.Fragment>
-			<Text color="yellow">{`Choose a book to ${edit? 'edit': 'view'} or return to main menu`}</Text>
+			<Title text={edit ? LIST_EDIT_TITLE: LIST_VIEW_TITLE} color={TITLE_COLOR} />
 			<SelectInput items={items} onSelect={onSelect} />
 		</React.Fragment>
 	);

@@ -1,34 +1,17 @@
 const React = require("react");
+const importJsx = require("import-jsx");
 const SelectInput = require("ink-select-input").default;
-const { Text } = require("ink");
 
-const choices = [
-	{
-		label: "View all books",
-		value: "VIEW",
-	},
-	{
-		label: "Add a book",
-		value: "ADD",
-	},
-	{
-		label: "Edit a book",
-		value: "EDIT",
-	},
-	{
-		label: "Search for a book",
-		value: "SEARCH",
-	},
-	{
-		label: "Save and exit",
-		value: "EXIT",
-	},
-];
+const Title = importJsx("../elements/Title.js");
+const { TITLE_COLOR } = require("../constants/Colors");
+const { MAIN_TITLE } = require("../constants/Phrases");
+
+const choices = require("../constants/mainChoices");
 
 const MainMenu = ({ onSelect }) => {
 	return (
 		<React.Fragment>
-			<Text color="yellow">Choose one of the following actions</Text>
+			<Title text={MAIN_TITLE} color={TITLE_COLOR}/>
 			<SelectInput items={choices} onSelect={onSelect} />
 		</React.Fragment>
 	);

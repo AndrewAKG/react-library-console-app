@@ -11,10 +11,9 @@
 	},
 	"files": [
 		"cli.js",
-		"ui.js"
+		"app.js"
 	],
 	"dependencies": {
-		"final-form": "^4.20.1",
 		"import-jsx": "^4.0.0",
 		"ink": "^3.0.8",
 		"ink-big-text": "^1.2.0",
@@ -22,7 +21,6 @@
 		"ink-text-input": "^4.0.1",
 		"meow": "^8.0.0",
 		"react": "^17.0.1",
-		"react-final-form": "^6.5.2",
 		"react-uuid": "^1.0.2",
 		"uuid": "^8.3.2"
 	},

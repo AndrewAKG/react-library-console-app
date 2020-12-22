@@ -1,62 +1,66 @@
 "use strict";
+// libraries imports
 const React = require("react");
 const importJsx = require("import-jsx");
 const { useApp } = require("ink");
 const { useState, useEffect, useContext } = require("react");
+const uuid = require("react-uuid");
 
-const HistoryContext = require('../state/History');
+// history context import
+const HistoryContext = require("../state/History");
 
+// components import
 const MainMenu = importJsx("./MainMenu.js");
 const BooksList = importJsx("./BooksList.js");
 const AddBook = importJsx("./AddBook.js");
 const EditBook = importJsx("./EditBook");
 const SearchForBook = importJsx("./SearchForBook.js");
 
-const { getAllBooks, addBook, editBook, searchForBook } = require("../service/booksService");
+// service import
+const {
+	getAllBooks,
+	addBook,
+	editBook,
+	searchForBook,
+} = require("../service/booksService");
 
-const mainChoices = [
-	{
-		label: "View all books",
-		value: "VIEW",
-	},
-	{
-		label: "Add a book",
-		value: "ADD",
-	},
-	{
-		label: "Edit a book",
-		value: "EDIT",
-	},
-	{
-		label: "Search for a book",
-		value: "SEARCH",
-	},
-	{
-		label: "Save and exit",
-		value: "EXIT",
-	},
-];
+// constants import
+const {
+	MAIN_TITLE,
+	LIST_VIEW_TITLE,
+	LIST_EDIT_TITLE,
+	SEARCH_TITLE
+} = require("../constants/Phrases");
+const mainChoices = require("../constants/mainChoices");
+
+// model import
+const BookListItem = require("../models/BookListItem");
 
 const Content = () => {
 	const { exit } = useApp();
+
+	// using history context
 	const { setHistory: updateHistory } = useContext(HistoryContext);
 
+	// mode for handling UI change
 	const [mode, setMode] = useState("MAIN_MENU");
+
+	// books (Book Structure), booksList (BookListItem Structure)
 	const [booksList, setBooksList] = useState([]);
 	const [books, setBooks] = useState([]);
+
 	const [chosenBook, setChosenBook] = useState(null);
 	const [editMode, setEditMode] = useState(false);
 
 	useEffect(() => {
+		// get all books from json file
 		let books = getAllBooks();
 		setBooks(books);
 	}, []);
 
+	// update booksList with BookListItem Structure
 	const updateBooksList = (newBooks) => {
-		const newBooksList = newBooks.map((book) => ({
-			label: `${book.title}`,
-			value: book.id,
-		}));
+		const newBooksList = newBooks.map(book => new BookListItem(book));
 
 		newBooksList.push({
 			label: "back to main menu",
@@ -66,64 +70,77 @@ const Content = () => {
 		setBooksList(newBooksList);
 	};
 
+	// handles use choose a book to view scenario
 	const handleViewBook = (item) => {
 		// add to history
 		updateHistory({
+			id: uuid(),
 			type: "select",
-			title: "Choose a book to view or return to main menu",
+			title: LIST_VIEW_TITLE,
 			options: booksList,
 			selectedValue: item.value,
 		});
 
+		// he didn't choose back to main menu
 		if (item.value !== -1) {
 			let bookId = item.value;
 			let chosenBook = books.filter((book) => book.id === bookId);
 
-			// add to history
+			// displat details in history
 			updateHistory({
+				id: uuid(),
 				type: "details_view",
 				item: chosenBook[0],
 			});
 		}
 
-		// adjust ui
+		// adjust ui if choose back to main menu
 		if (item.value === -1) {
 			setMode("MAIN_MENU");
-		} else {
-			setMode("BOOKS_LIST_VIEW");
 		}
 	};
 
+	// handles use choose add book scenario
 	const handleAddBook = (addedBook) => {
+		// save book to json
 		let newBook = addBook(addedBook);
+
+		// update books in state
 		let newBooks = [...books];
 		newBooks.push(newBook);
 		setBooks(newBooks);
 
+		// add history event
 		updateHistory({
+			id: uuid(),
 			type: "info",
 			title: "saved.",
 			item: newBook,
 		});
+
+		// adjust UI
 		setMode("MAIN_MENU");
 	};
 
+	// handles use choose a book to edit scenario
 	const handleViewBookEditMode = (item) => {
-		// add to history
+		// add history event
 		updateHistory({
+			id: uuid(),
 			type: "select",
-			title: "Choose a book to edit or return to main menu",
+			title: LIST_EDIT_TITLE,
 			options: booksList,
 			selectedValue: item.value,
 		});
 
+		// user didn't choose back to main menu
 		if (item.value !== -1) {
 			let bookId = item.value;
 			let chosenBook = books.filter((book) => book.id === bookId);
 			setChosenBook(chosenBook[0] ? chosenBook[0] : {});
 		}
 
-		// adjust ui
+		// if user choose back to main menu - adjust UI
 		if (item.value === -1) {
 			setMode("MAIN_MENU");
 			setEditMode(false);
@@ -145,6 +162,7 @@ const Content = () => {
 			}
 
 			updateHistory({
+				id: uuid(),
 				type: "info",
 				title: "edited successfully.",
 				item: editedBook,
@@ -157,20 +175,22 @@ const Content = () => {
 
 	const handleSearchForBook = (searchKey) => {
 		updateHistory({
+			id: uuid(),
 			type: "search",
-			title: "Type in one or more keywords to search for",
-			searchKey
-		})
+			title: SEARCH_TITLE,
+			searchKey,
+		});
 
 		let searchResults = searchForBook(searchKey);
 		updateBooksList(searchResults);
-		setMode('BOOKS_LIST_VIEW');
+		setMode("BOOKS_LIST_VIEW");
 	};
 
 	const handleMainMenu = (item) => {
 		updateHistory({
+			id: uuid(),
 			type: "select",
-			title: "Choose one of the following actions",
+			title: MAIN_TITLE,
 			options: mainChoices,
 			selectedValue: item.value,
 		});

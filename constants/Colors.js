@@ -1,0 +1,12 @@
+const TITLE_COLOR = "yellow";
+
+const HISTORY_TITLE = "cyan";
+const HISTORY_SELECTED_VALUE = "green";
+const HISTORY_UN_SELECTED_VALUE = "grey";
+
+module.exports = {
+  TITLE_COLOR,
+  HISTORY_TITLE,
+  HISTORY_SELECTED_VALUE,
+  HISTORY_UN_SELECTED_VALUE
+}
