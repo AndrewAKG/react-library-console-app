@@ -5,7 +5,7 @@ const importJsx = require('import-jsx');
 const {render} = require('ink');
 const meow = require('meow');
 
-const App = importJsx('./App');
+const App = importJsx('./app');
 
 const cli = meow(`
 	Usage
