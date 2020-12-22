@@ -53,6 +53,13 @@ const Content = () => {
 	const [editMode, setEditMode] = useState(false);
 
 	useEffect(() => {
+		// render big text
+		updateHistory({
+			id: uuid(),
+			type: "initialize",
+			title: "Books Manager"
+		})
+
 		// get all books from json file
 		let books = getAllBooks();
 

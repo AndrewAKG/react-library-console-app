@@ -8,6 +8,7 @@ const BookDetails = importJsx("./BookDetails.js");
 const HistoryContext = require("../state/History");
 
 const Title = importJsx("../elements/Title.js");
+const BigText = require("ink-big-text");
 
 const {
 	HISTORY_TITLE,
@@ -19,7 +20,7 @@ const {
  * History structure
  * {
  * 		id: unique event id
- *    type: select | details_view | book_event | search | info
+ *    type: initialize | select | details_view | book_event | search | info
  *    title: action title
  *    options: select options if type is select || []
  *    item: item to view if type is details_view or book_event
@@ -35,6 +36,13 @@ const History = () => {
 		<Static items={history}>
 			{(event) => {
 				switch (event.type) {
+					case "initialize":
+						return (
+							<React.Fragment key={event.id}>
+								<BigText text={event.title} />
+							</React.Fragment>
+						);
+
 					case "select":
 						return (
 							<React.Fragment key={event.id}>
@@ -66,7 +74,10 @@ const History = () => {
 					case "book_event":
 						return (
 							<React.Fragment key={event.id}>
-								<Title text={`[INFO] [${event.item.id}] ${event.item.title} book ${event.title}`} color={HISTORY_TITLE} />
+								<Title
+									text={`[INFO] [${event.item.id}] ${event.item.title} book ${event.title}`}
+									color={HISTORY_TITLE}
+								/>
 								<Newline />
 							</React.Fragment>
 						);
@@ -79,7 +90,7 @@ const History = () => {
 								<Newline />
 							</React.Fragment>
 						);
-					
+
 					case "info":
 						return (
 							<React.Fragment key={event.id}>

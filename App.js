@@ -4,7 +4,6 @@ const importJsx = require("import-jsx");
 
 const { useReducer } = require("react");
 
-// const CliBigText = importJsx("./elements/CliBigText.js");
 const History = importJsx("./components/History.js");
 const Content = importJsx("./components/Content.js");
 
@@ -19,13 +18,10 @@ const App = () => {
 	const [history, setHistory] = useReducer(historyReducer, []);
 
 	return (
-		<>
-			<HistoryContext.Provider value={{ history, setHistory }}>
-				{/* <CliBigText items={["BOOKS MANAGER"]} /> */}
-				<History />
-				<Content />
-			</HistoryContext.Provider>
-		</>
+		<HistoryContext.Provider value={{ history, setHistory }}>
+			<History />
+			<Content />
+		</HistoryContext.Provider>
 	);
 };
 
